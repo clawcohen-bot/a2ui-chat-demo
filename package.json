@@ -9,11 +9,15 @@
   ],
   "scripts": {
     "dev": "concurrently \"pnpm --filter server dev\" \"pnpm --filter web dev\"",
-    "build": "pnpm --filter shared build && pnpm --filter catalog build && pnpm --filter renderer build && pnpm --filter server build && pnpm --filter web build",
-    "test": "pnpm --filter renderer test"
+    "build": "pnpm --filter catalog build && pnpm --filter server build && pnpm --filter web build",
+    "test": "echo \"No tests\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@a2ui/react": "0.9.1",
+    "@a2ui/web_core": "0.9.2"
   }
 }

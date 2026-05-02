@@ -5,14 +5,14 @@
  * a Server-Sent Events stream of SSEPayload objects.
  *
  * Event types emitted:
- *   data: {"delta":"...""}          — text chunk
- *   data: {"version":"v0.9",...}    — A2UI message (createSurface / updateComponents / etc.)
- *   data: {}                        — done sentinel
+ *   data: {"delta":"..."}            — text chunk
+ *   data: {"version":"v0.9",...}     — A2UI message (createSurface / updateComponents / etc.)
+ *   data: {}                         — done sentinel
  */
 
 import { Router, Request, Response } from "express";
-import type { ChatMessage } from "@a2ui-demo/shared";
-import { runAgentTurn } from "../agent/claude";
+import type { ChatMessage } from "../agent/claude.js";
+import { runAgentTurn } from "../agent/claude.js";
 
 export const chatRouter = Router();
 

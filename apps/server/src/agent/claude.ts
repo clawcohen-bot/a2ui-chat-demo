@@ -6,8 +6,16 @@
  */
 
 import Anthropic from "@anthropic-ai/sdk";
-import type { A2UIMessage, ChatMessage } from "@a2ui-demo/shared";
-import { SYSTEM_PROMPT } from "./prompts";
+import type { A2uiMessage } from "@a2ui/web_core/v0_9";
+import { A2uiMessageSchema } from "@a2ui/web_core/v0_9";
+import { SYSTEM_PROMPT } from "./prompts.js";
+
+// Wire-format chat message
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+  action?: Record<string, unknown>;
+}
 
 const client = new Anthropic(); // reads ANTHROPIC_API_KEY from env
 
@@ -15,7 +23,7 @@ const client = new Anthropic(); // reads ANTHROPIC_API_KEY from env
 export type OnDelta = (delta: string) => void;
 
 /** Called when Claude uses render_ui_surface — receives each parsed A2UI message */
-export type OnA2UI = (msg: A2UIMessage) => void;
+export type OnA2UI = (msg: A2uiMessage) => void;
 
 /** Called when the turn is fully complete */
 export type OnDone = () => void;
@@ -99,10 +107,11 @@ export async function runAgentTurn(
         const input = block.input as { messages?: unknown[] };
         const msgs = input?.messages ?? [];
         for (const rawMsg of msgs) {
-          try {
-            onA2UI(rawMsg as A2UIMessage);
-          } catch {
-            // skip malformed message
+          const parsed = A2uiMessageSchema.safeParse(rawMsg);
+          if (parsed.success) {
+            onA2UI(parsed.data);
+          } else {
+            console.error("[claude] Invalid A2UI message, skipping:", parsed.error.flatten());
           }
         }
       }

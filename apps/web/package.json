@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@a2ui-demo/catalog": "workspace:*",
-    "@a2ui-demo/renderer": "workspace:*",
-    "@a2ui-demo/shared": "workspace:*",
+    "@a2ui/react": "0.9.1",
+    "@a2ui/web_core": "0.9.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

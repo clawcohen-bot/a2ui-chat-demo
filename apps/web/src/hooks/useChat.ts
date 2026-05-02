@@ -6,8 +6,15 @@
  */
 
 import { useState, useCallback, useRef } from "react";
-import type { ChatMessage, A2UIMessage, A2UIAction } from "@a2ui-demo/shared";
+import type { A2uiMessage, A2uiClientAction } from "@a2ui/web_core/v0_9";
 import { streamChat } from "../api";
+
+// Wire-format chat message (matches server's ChatMessage shape)
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+  action?: A2uiClientAction;
+}
 
 export interface DisplayMessage {
   id: string;
@@ -15,7 +22,7 @@ export interface DisplayMessage {
   /** Streamed/final text content */
   content: string;
   /** A2UI messages associated with this turn */
-  a2uiMessages: A2UIMessage[];
+  a2uiMessages: A2uiMessage[];
   /** Whether this message is currently streaming */
   streaming?: boolean;
 }
@@ -43,7 +50,7 @@ export function useChat() {
   };
 
   const sendMessage = useCallback(
-    async (text: string, action?: A2UIAction) => {
+    async (text: string, action?: A2uiClientAction) => {
       if (isLoading) return;
 
       const userMsg: DisplayMessage = {
@@ -136,8 +143,8 @@ export function useChat() {
   );
 
   const handleAction = useCallback(
-    (action: A2UIAction) => {
-      const actionText = `Action triggered: **${action.action.name}**`;
+    (action: A2uiClientAction) => {
+      const actionText = `Action triggered: **${action.name}**`;
       sendMessage(actionText, action);
     },
     [sendMessage]

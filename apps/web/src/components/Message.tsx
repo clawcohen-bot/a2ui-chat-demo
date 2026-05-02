@@ -3,13 +3,13 @@
  */
 
 import React from "react";
-import type { A2UIAction } from "@a2ui-demo/shared";
+import type { A2uiClientAction } from "@a2ui/web_core/v0_9";
 import type { DisplayMessage } from "../hooks/useChat";
 import { SurfaceHost } from "./SurfaceHost";
 
 interface MessageProps {
   message: DisplayMessage;
-  onAction: (action: A2UIAction) => void;
+  onAction: (action: A2uiClientAction) => void;
 }
 
 export function Message({ message, onAction }: MessageProps) {

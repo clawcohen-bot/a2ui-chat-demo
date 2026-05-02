@@ -5,22 +5,27 @@
  * A2UI messages, and a done signal.
  */
 
-import type { A2UIMessage, ChatMessage, SSEPayload } from "@a2ui-demo/shared";
-import { isCreateSurface, isUpdateComponents, isUpdateDataModel, isDeleteSurface } from "@a2ui-demo/shared";
+import type { A2uiMessage } from "@a2ui/web_core/v0_9";
+import type { ChatMessage } from "./hooks/useChat";
 
 export interface StreamCallbacks {
   onDelta: (text: string) => void;
-  onA2UI: (msg: A2UIMessage) => void;
+  onA2UI: (msg: A2uiMessage) => void;
   onDone: () => void;
   onError: (err: Error) => void;
 }
 
-function isA2UIMessage(payload: SSEPayload): payload is A2UIMessage {
+function isA2UIMessage(payload: unknown): payload is A2uiMessage {
+  if (typeof payload !== "object" || payload === null) return false;
+  const p = payload as Record<string, unknown>;
   return (
-    isCreateSurface(payload as A2UIMessage) ||
-    isUpdateComponents(payload as A2UIMessage) ||
-    isUpdateDataModel(payload as A2UIMessage) ||
-    isDeleteSurface(payload as A2UIMessage)
+    p["version"] === "v0.9" &&
+    (
+      "createSurface" in p ||
+      "updateComponents" in p ||
+      "updateDataModel" in p ||
+      "deleteSurface" in p
+    )
   );
 }
 
@@ -70,20 +75,25 @@ export async function streamChat(
         const raw = line.slice(6).trim();
         if (!raw) continue;
 
-        let payload: SSEPayload;
+        let payload: unknown;
         try {
-          payload = JSON.parse(raw) as SSEPayload;
+          payload = JSON.parse(raw);
         } catch {
           continue;
         }
 
         // Done sentinel: empty object {}
-        if (Object.keys(payload).length === 0) {
+        if (typeof payload === "object" && payload !== null && Object.keys(payload).length === 0) {
           callbacks.onDone();
           continue;
         }
 
-        if ("delta" in payload && typeof (payload as { delta: string }).delta === "string") {
+        if (
+          typeof payload === "object" &&
+          payload !== null &&
+          "delta" in payload &&
+          typeof (payload as { delta: string }).delta === "string"
+        ) {
           callbacks.onDelta((payload as { delta: string }).delta);
         } else if (isA2UIMessage(payload)) {
           callbacks.onA2UI(payload);
