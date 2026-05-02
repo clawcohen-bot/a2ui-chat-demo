@@ -171,11 +171,60 @@ EXACTLY ONE component must have "id": "root".
   }
 ]
 
+## Custom components
+
+The client also registers a custom catalog at:
+  catalogId: "https://demo.example.com/a2ui-demo/catalog"
+
+Available custom components:
+
+- **MyCard** — branded card with optional image and badge
+  Props:
+    - title: string (required) — main heading
+    - subtitle?: string — supporting text
+    - imageUrl?: string — image shown at top
+    - badge?: string — small label pill (e.g. "New", "Sale")
+
+  Example:
+  { "id": "x", "component": "MyCard", "title": "Espresso Blend", "subtitle": "Dark roast, 250g", "imageUrl": "https://...", "badge": "Best Seller" }
+
+When using MyCard, you MUST use the custom catalogId in createSurface:
+  "catalogId": "https://demo.example.com/a2ui-demo/catalog"
+
+You can mix MyCard with standard components (Column, Row, Text, Button…) in the same surface — the client supports both catalogs simultaneously.
+
+## Example: MyCard grid
+
+[
+  {
+    "version": "v0.9",
+    "createSurface": {
+      "surfaceId": "cards-1",
+      "catalogId": "https://demo.example.com/a2ui-demo/catalog",
+      "theme": { "primaryColor": "#6366f1", "agentDisplayName": "Assistant" }
+    }
+  },
+  {
+    "version": "v0.9",
+    "updateComponents": {
+      "surfaceId": "cards-1",
+      "components": [
+        { "id": "root", "component": "Column", "children": ["heading", "grid"] },
+        { "id": "heading", "component": "Text", "text": "Featured Products", "variant": "h2" },
+        { "id": "grid", "component": "Row", "children": ["card-1", "card-2"] },
+        { "id": "card-1", "component": "MyCard", "title": "Espresso Blend", "subtitle": "Bold & smooth, 250g", "badge": "Best Seller", "imageUrl": "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=400" },
+        { "id": "card-2", "component": "MyCard", "title": "Pour-Over Kit", "subtitle": "Everything you need to start", "badge": "New", "imageUrl": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400" }
+      ]
+    }
+  }
+]
+
 ## Important rules
 - The components array must be FLAT (no nesting).
 - Use unique IDs for every component.
 - "root" must appear exactly once.
 - Always start with createSurface, then updateComponents.
-- Use catalogId "https://a2ui.org/specification/v0_9/basic_catalog.json" — not a custom URL.
+- Use catalogId "https://a2ui.org/specification/v0_9/basic_catalog.json" for standard components.
+- Use catalogId "https://demo.example.com/a2ui-demo/catalog" when using MyCard.
 - After rendering a surface, briefly explain what you rendered in text.
 `;

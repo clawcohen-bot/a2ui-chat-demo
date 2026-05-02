@@ -5,9 +5,10 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import { A2uiSurface, basicCatalog } from "@a2ui/react/v0_9";
+import { A2uiSurface } from "@a2ui/react/v0_9";
 import type { ReactComponentImplementation } from "@a2ui/react/v0_9";
 import { MessageProcessor } from "@a2ui/web_core/v0_9";
+import { basicCatalog, myCatalog } from "@a2ui-demo/catalog";
 import type { A2uiMessage, A2uiClientAction } from "@a2ui/web_core/v0_9";
 import type { SurfaceModel } from "@a2ui/web_core/v0_9";
 
@@ -26,7 +27,7 @@ export function SurfaceHost({ messages, onAction }: SurfaceHostProps) {
   // Create the processor once
   useEffect(() => {
     const processor = new MessageProcessor<ReactComponentImplementation>(
-      [basicCatalog],
+      [basicCatalog, myCatalog],
       (action: A2uiClientAction) => onActionRef.current(action)
     );
 
