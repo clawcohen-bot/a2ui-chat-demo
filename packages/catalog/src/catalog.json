@@ -1,0 +1,48 @@
+{
+  "catalogId": "mycompany.com:demo-catalog",
+  "version": "v0.9",
+  "components": [
+    {
+      "name": "TextBlock",
+      "a2uiType": "Text",
+      "description": "Heading or paragraph text",
+      "props": ["text", "variant"]
+    },
+    {
+      "name": "Button",
+      "a2uiType": "Button",
+      "description": "Clickable button with primary/secondary style",
+      "props": ["label", "variant", "action"]
+    },
+    {
+      "name": "TextInput",
+      "a2uiType": "TextField",
+      "description": "Text input field",
+      "props": ["label", "placeholder", "value", "variant"]
+    },
+    {
+      "name": "DateTimePicker",
+      "a2uiType": "DateTimeInput",
+      "description": "Date/time picker",
+      "props": ["label", "value", "enableDate", "enableTime"]
+    },
+    {
+      "name": "SelectList",
+      "a2uiType": "ChoicePicker",
+      "description": "Single-select dropdown or radio list",
+      "props": ["label", "options", "value", "variant", "displayStyle"]
+    },
+    {
+      "name": "Card",
+      "a2uiType": "Card",
+      "description": "Container card with optional title",
+      "props": ["title", "children"]
+    },
+    {
+      "name": "ProductTile",
+      "a2uiType": "Column",
+      "description": "Product card with image, title, price, and choose button",
+      "props": ["imageUrl", "title", "price", "onChoose"]
+    }
+  ]
+}

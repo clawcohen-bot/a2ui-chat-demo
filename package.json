@@ -1,0 +1,19 @@
+{
+  "name": "a2ui-chat-demo",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.0.0",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter server dev\" \"pnpm --filter web dev\"",
+    "build": "pnpm --filter shared build && pnpm --filter catalog build && pnpm --filter renderer build && pnpm --filter server build && pnpm --filter web build",
+    "test": "pnpm --filter renderer test"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.4.5"
+  }
+}
